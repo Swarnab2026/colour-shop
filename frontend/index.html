@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Shop - Product Catalog</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .search-bar input {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            width: 400px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-bar input:focus {
+            border-color: #667eea;
+        }
+
+        .search-bar button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #5568d3;
+        }
+
+        .filters {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        select {
+            padding: 8px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .product-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .product-brand {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .product-details {
+            margin: 15px 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .price {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .stock {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .in-stock {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .low-stock {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .out-of-stock {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+            font-size: 1.2em;
+        }
+
+        .admin-link {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #764ba2;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: background 0.3s;
+            font-weight: 600;
+        }
+
+        .admin-link:hover {
+            background: #5f3a82;
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎨 Color Shop</h1>
+            <p class="tagline">Your trusted paint & color supplier</p>
+            
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products, brands, or categories...">
+                <button onclick="searchProducts()">Search</button>
+            </div>
+        </header>
+
+        <div class="filters">
+            <span class="filter-label">Filter by:</span>
+            <select id="categoryFilter" onchange="filterProducts()">
+                <option value="">All Categories</option>
+            </select>
+            <select id="brandFilter" onchange="filterProducts()">
+                <option value="">All Brands</option>
+            </select>
+            <select id="stockFilter" onchange="filterProducts()">
+                <option value="">All Stock Status</option>
+                <option value="in-stock">In Stock</option>
+                <option value="low-stock">Low Stock</option>
+                <option value="out-of-stock">Out of Stock</option>
+            </select>
+        </div>
+
+        <div id="productsContainer" class="products-grid">
+            <div class="loading">Loading products...</div>
+        </div>
+    </div>
+
+    <a href="admin.html" class="admin-link">🔐 Admin Login</a>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let allProducts = [];
+
+        // Fetch and display products
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                allProducts = await response.json();
+                
+                populateFilters();
+                displayProducts(allProducts);
+            } catch (error) {
+                document.getElementById('productsContainer').innerHTML = 
+                    '<div class="no-products">Failed to load products. Please check if the server is running.</div>';
+                console.error('Error:', error);
+            }
+        }
+
+        function populateFilters() {
+            const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+            const brands = [...new Set(allProducts.map(p => p.brand).filter(Boolean))];
+
+            const categoryFilter = document.getElementById('categoryFilter');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categoryFilter.appendChild(option);
+            });
+
+            const brandFilter = document.getElementById('brandFilter');
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandFilter.appendChild(option);
+            });
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-products">No products found.</div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => {
+                const stockStatus = getStockStatus(product.quantity);
+                return `
+                    <div class="product-card">
+                        <div class="product-header">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-brand">${product.brand}</div>
+                        </div>
+                        
+                        <div class="product-details">
+                            ${product.color ? `
+                            <div class="detail-row">
+                                <span class="detail-label">Color:</span>
+                                <span class="detail-value">${product.color}</span>
+                            </div>` : ''}
+                            
+                            ${product.size ? `
+                            <div class="detail-row">
+                                <span class="detail-label">Size:</span>
+                                <span class="detail-value">${product.size}</span>
+                            </div>` : ''}
+                            
+                            ${product.category ? `
+                            <div class="detail-row">
+                                <span class="detail-label">Category:</span>
+                                <span class="detail-value">${product.category}</span>
+                            </div>` : ''}
+                            
+                            ${product.description ? `
+                            <div class="detail-row">
+                                <span class="detail-label">Description:</span>
+                                <span class="detail-value">${product.description}</span>
+                            </div>` : ''}
+                        </div>
+                        
+                        <div class="product-footer">
+                            <div class="price">₹${product.price.toLocaleString()}</div>
+                            <div class="stock ${stockStatus.class}">${stockStatus.text}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStockStatus(quantity) {
+            if (quantity === 0) {
+                return { class: 'out-of-stock', text: 'Out of Stock' };
+            } else if (quantity <= 5) {
+                return { class: 'low-stock', text: `Low Stock (${quantity})` };
+            } else {
+                return { class: 'in-stock', text: `In Stock (${quantity})` };
+            }
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            const brand = document.getElementById('brandFilter').value;
+            const stock = document.getElementById('stockFilter').value;
+
+            let filtered = allProducts;
+
+            if (category) {
+                filtered = filtered.filter(p => p.category === category);
+            }
+
+            if (brand) {
+                filtered = filtered.filter(p => p.brand === brand);
+            }
+
+            if (stock) {
+                filtered = filtered.filter(p => {
+                    const status = getStockStatus(p.quantity);
+                    return status.class === stock;
+                });
+            }
+
+            displayProducts(filtered);
+        }
+
+        async function searchProducts() {
+            const query = document.getElementById('searchInput').value.trim();
+            
+            if (!query) {
+                displayProducts(allProducts);
+                return;
+            }
+
+            const filtered = allProducts.filter(p => 
+                p.name.toLowerCase().includes(query.toLowerCase()) ||
+                p.brand.toLowerCase().includes(query.toLowerCase()) ||
+                (p.category && p.category.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            displayProducts(filtered);
+        }
+
+        // Allow Enter key to search
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchProducts();
+        });
+
+        // Load products on page load
+        loadProducts();
+    </script>
+</body>
+</html>
