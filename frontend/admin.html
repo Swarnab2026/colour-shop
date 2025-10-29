@@ -174,7 +174,7 @@
 
         .modal-content {
             background: white;
-            max-width: 600px;
+            max-width: 700px;
             margin: 50px auto;
             padding: 30px;
             border-radius: 15px;
@@ -203,6 +203,80 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+        }
+
+        /* Image Upload Styles */
+        .image-upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .image-upload-container:hover {
+            border-color: #667eea;
+            background: #f0f2ff;
+        }
+
+        .image-upload-container.has-image {
+            border-style: solid;
+            border-color: #28a745;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px auto;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .color-code-input {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-preview {
+            width: 50px;
+            height: 40px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .remove-image-btn {
+            width: auto;
+            padding: 8px 16px;
+            background: #dc3545;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .remove-image-btn:hover {
+            background: #c82333;
         }
 
         /* Products Table */
@@ -234,6 +308,22 @@
 
         tr:hover {
             background: #f8f9fa;
+        }
+
+        .color-swatch {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            display: inline-block;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid #ddd;
         }
 
         .action-btns {
@@ -319,7 +409,7 @@
 <body>
     <!-- Login Form -->
     <div id="loginContainer" class="login-container">
-        <h2>🔐 Admin Login</h2>
+        <h2>🔒 Admin Login</h2>
         <div id="loginMessage"></div>
         <form onsubmit="login(event)">
             <div class="form-group">
@@ -332,7 +422,7 @@
             </div>
             <button type="submit">Login</button>
         </form>
-        <a href="index.html" class="back-link">← Back to Shop</a>
+        <a href="home.html" class="back-link">← Back to Shop</a>
     </div>
 
     <!-- Admin Dashboard -->
@@ -354,6 +444,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Image</th>
                             <th>Name</th>
                             <th>Brand</th>
                             <th>Color</th>
@@ -365,7 +456,7 @@
                         </tr>
                     </thead>
                     <tbody id="productsTableBody">
-                        <tr><td colspan="8" style="text-align: center;">Loading...</td></tr>
+                        <tr><td colspan="9" style="text-align: center;">Loading...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -377,9 +468,22 @@
         <div class="modal-content">
             <span class="close-modal" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle">Add New Product</h2>
-            <form onsubmit="saveProduct(event)">
+            <form onsubmit="saveProduct(event)" id="productForm">
                 <input type="hidden" id="productId">
                 
+                <!-- Image Upload Section -->
+                <div class="form-group">
+                    <label>Color Image</label>
+                    <div class="image-upload-container" id="imageUploadContainer" onclick="document.getElementById('colorImageInput').click()">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-text">Click to upload color image</div>
+                        <div class="upload-text" style="font-size: 12px; margin-top: 5px;">JPG, PNG or WEBP (Max 5MB)</div>
+                        <img id="imagePreview" class="image-preview" alt="Preview">
+                    </div>
+                    <input type="file" id="colorImageInput" class="file-input" accept="image/jpeg,image/png,image/webp" onchange="handleImageSelect(event)">
+                    <button type="button" class="remove-image-btn" id="removeImageBtn" style="display: none;" onclick="removeImage()">Remove Image</button>
+                </div>
+
                 <div class="form-group">
                     <label>Product Name *</label>
                     <input type="text" id="productName" required>
@@ -391,8 +495,16 @@
                         <input type="text" id="productBrand" required>
                     </div>
                     <div class="form-group">
-                        <label>Color</label>
-                        <input type="text" id="productColor">
+                        <label>Color Name</label>
+                        <input type="text" id="productColor" placeholder="e.g., Sky Blue">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Color Code (Hex)</label>
+                    <div class="color-code-input">
+                        <input type="text" id="productColorCode" placeholder="#RRGGBB or #RGB" >
+                        <!-- <input type="color" id="colorPicker" class="color-preview" onchange="updateColorCode(event)"> -->
                     </div>
                 </div>
 
@@ -423,14 +535,16 @@
                     <textarea id="productDescription" placeholder="Optional product description"></textarea>
                 </div>
 
-                <button type="submit">Save Product</button>
+                <button type="submit" id="saveBtn">Save Product</button>
             </form>
         </div>
     </div>
 
     <script>
-        const API_URL = 'https://colour-shop.vercel.app/api';
+        const API_URL = 'http://localhost:5000/api';
         let isLoggedIn = false;
+        let selectedImage = null;
+        let currentProduct = null;
 
         // Check if already logged in
         if (sessionStorage.getItem('adminLoggedIn')) {
@@ -475,6 +589,49 @@
             location.reload();
         }
 
+        // Image handling functions
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB');
+                    return;
+                }
+
+                selectedImage = file;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                    document.getElementById('imageUploadContainer').classList.add('has-image');
+                    document.getElementById('removeImageBtn').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            selectedImage = null;
+            document.getElementById('colorImageInput').value = '';
+            document.getElementById('imagePreview').classList.remove('show');
+            document.getElementById('imageUploadContainer').classList.remove('has-image');
+            document.getElementById('removeImageBtn').style.display = 'none';
+        }
+
+        //function updateColorCode(event) {
+         //   document.getElementById('productColorCode').value = event.target.value;
+       // }
+
+        // Sync color picker with color code input
+        //document.getElementById('productColorCode').addEventListener('input', function(e) {
+            //const value = e.target.value;
+            //if (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(value)) {
+           //     document.getElementById('colorPicker').value = value;
+         //   }
+       // });
+
         // Load products
         async function loadProducts() {
             try {
@@ -490,14 +647,21 @@
             const tbody = document.getElementById('productsTableBody');
             
             if (products.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center;">No products yet. Add your first product!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No products yet. Add your first product!</td></tr>';
                 return;
             }
 
             tbody.innerHTML = products.map(product => {
                 const stockBadge = getStockBadge(product.quantity);
+                const imageHtml = product.colorImageUrl 
+                    ? `<img src="${product.colorImageUrl}" class="product-image" alt="${product.name}">`
+                    : product.colorCode 
+                    ? `<div class="color-swatch" style="background-color: ${product.colorCode}"></div>`
+                    : '-';
+                
                 return `
                     <tr>
+                        <td>${imageHtml}</td>
                         <td>${product.name}</td>
                         <td>${product.brand}</td>
                         <td>${product.color || '-'}</td>
@@ -506,7 +670,7 @@
                         <td>₹${product.price.toLocaleString()}</td>
                         <td><span class="stock-badge ${stockBadge.class}">${product.quantity}</span></td>
                         <td class="action-btns">
-                            <button class="edit-btn" onclick='editProduct(${JSON.stringify(product)})'>Edit</button>
+                            <button class="edit-btn" onclick='editProduct(${JSON.stringify(product).replace(/'/g, "&apos;")})'>Edit</button>
                             <button class="delete-btn" onclick="deleteProduct('${product._id}')">Delete</button>
                         </td>
                     </tr>
@@ -528,26 +692,49 @@
         function openAddModal() {
             document.getElementById('modalTitle').textContent = 'Add New Product';
             document.getElementById('productId').value = '';
-            document.querySelector('#productModal form').reset();
+            document.getElementById('productForm').reset();
+            removeImage();
+            currentProduct = null;
             document.getElementById('productModal').style.display = 'block';
         }
 
         function editProduct(product) {
+            currentProduct = product;
             document.getElementById('modalTitle').textContent = 'Edit Product';
             document.getElementById('productId').value = product._id;
             document.getElementById('productName').value = product.name;
             document.getElementById('productBrand').value = product.brand;
             document.getElementById('productColor').value = product.color || '';
+            document.getElementById('productColorCode').value = product.colorCode || '';
             document.getElementById('productSize').value = product.size || '';
             document.getElementById('productCategory').value = product.category || '';
             document.getElementById('productPrice').value = product.price;
             document.getElementById('productQuantity').value = product.quantity;
             document.getElementById('productDescription').value = product.description || '';
+            
+            // Set color picker
+            //if (product.colorCode) {
+              //  document.getElementById('colorPicker').value = product.colorCode;
+            //}
+
+            // Show existing image if available
+            if (product.colorImageUrl) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = product.colorImageUrl;
+                preview.classList.add('show');
+                document.getElementById('imageUploadContainer').classList.add('has-image');
+                document.getElementById('removeImageBtn').style.display = 'block';
+            } else {
+                removeImage();
+            }
+
             document.getElementById('productModal').style.display = 'block';
         }
 
         function closeModal() {
             document.getElementById('productModal').style.display = 'none';
+            removeImage();
+            currentProduct = null;
         }
 
         // Save product (add or update)
@@ -555,16 +742,39 @@
             event.preventDefault();
             
             const productId = document.getElementById('productId').value;
-            const productData = {
-                name: document.getElementById('productName').value,
-                brand: document.getElementById('productBrand').value,
-                color: document.getElementById('productColor').value,
-                size: document.getElementById('productSize').value,
-                category: document.getElementById('productCategory').value,
-                price: parseFloat(document.getElementById('productPrice').value),
-                quantity: parseInt(document.getElementById('productQuantity').value),
-                description: document.getElementById('productDescription').value
-            };
+            const saveBtn = document.getElementById('saveBtn');
+            
+            // Get form values
+            const name = document.getElementById('productName').value.trim();
+            const brand = document.getElementById('productBrand').value.trim();
+            const price = document.getElementById('productPrice').value;
+            const quantity = document.getElementById('productQuantity').value;
+
+            // Validate required fields
+            if (!name || !brand || !price || !quantity) {
+                alert('Please fill in all required fields (Name, Brand, Price, Quantity)');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            // Create FormData for file upload
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('brand', brand);
+            formData.append('color', document.getElementById('productColor').value.trim());
+            formData.append('colorCode', document.getElementById('productColorCode').value.trim());
+            formData.append('size', document.getElementById('productSize').value.trim());
+            formData.append('category', document.getElementById('productCategory').value.trim());
+            formData.append('price', price);
+            formData.append('quantity', quantity);
+            formData.append('description', document.getElementById('productDescription').value.trim());
+
+            // Add image if selected
+            if (selectedImage) {
+                formData.append('colorImage', selectedImage);
+            }
 
             try {
                 const url = productId 
@@ -575,8 +785,7 @@
 
                 const response = await fetch(url, {
                     method: method,
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(productData)
+                    body: formData // Don't set Content-Type header, browser will set it automatically with boundary
                 });
 
                 if (response.ok) {
@@ -586,10 +795,14 @@
                 } else {
                     const data = await response.json();
                     alert('Error: ' + data.message);
+                    console.error('Server error:', data);
                 }
             } catch (error) {
-                alert('Failed to save product. Please try again.');
+                alert('Failed to save product. Please check if the server is running.');
                 console.error('Error:', error);
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Product';
             }
         }
 
