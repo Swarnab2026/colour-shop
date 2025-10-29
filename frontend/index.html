@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Shop - Product Catalog</title>
+    <title>ColorCraft Paint Shop - Premium Paints & Supplies</title>
     <style>
         * {
             margin: 0;
@@ -13,9 +13,118 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🎨";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
+                        url('https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=1600') center/cover;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b35;
+            color: white;
+            padding: 1rem 2.5rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,107,53,0.4);
+        }
+
+        .cta-button:hover {
+            background: #e55a2b;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255,107,53,0.6);
+        }
+
+        /* About Section */
+        .about {
+            padding: 5rem 2rem;
+            background: #f8f9fa;
         }
 
         .container {
@@ -23,428 +132,343 @@
             margin: 0 auto;
         }
 
-        header {
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #1e3c72;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 3rem;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .about-card {
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            margin-bottom: 30px;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
             text-align: center;
         }
 
-        h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        .about-card:hover {
+            transform: translateY(-10px);
         }
 
-        .tagline {
-            color: #666;
-            font-size: 1.1em;
+        .about-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
         }
 
-        .search-bar {
-            margin: 20px 0;
-            display: flex;
-            gap: 10px;
-            justify-content: center;
+        .about-card h3 {
+            color: #1e3c72;
+            margin-bottom: 1rem;
         }
 
-        .search-bar input {
-            padding: 12px 20px;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            width: 400px;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .search-bar input:focus {
-            border-color: #667eea;
-        }
-
-        .search-bar button {
-            padding: 12px 30px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        .search-bar button:hover {
-            background: #5568d3;
-        }
-
-        .filters {
+        /* Products Section */
+        .products {
+            padding: 5rem 2rem;
             background: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: center;
         }
 
-        .filter-label {
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        select {
-            padding: 8px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .products-grid {
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
         .product-card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
 
-        .product-header {
-            border-bottom: 2px solid #f0f0f0;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
         }
 
-        .product-name {
-            font-size: 1.3em;
-            color: #333;
-            margin-bottom: 8px;
-            font-weight: bold;
+        .product-info {
+            padding: 1.5rem;
         }
 
-        .product-brand {
-            color: #667eea;
-            font-weight: 600;
-            font-size: 0.95em;
+        .product-info h3 {
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
         }
 
-        .product-details {
-            margin: 15px 0;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 8px 0;
-            font-size: 0.95em;
-        }
-
-        .detail-label {
+        .product-info p {
             color: #666;
-            font-weight: 500;
+            margin-bottom: 1rem;
         }
 
-        .detail-value {
-            color: #333;
-            font-weight: 600;
+        /* Why Choose Us */
+        .features {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
         }
 
-        .color-preview {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-            display: inline-block;
-            vertical-align: middle;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .product-footer {
+        .feature-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* Contact Preview */
+        .contact-preview {
+            padding: 5rem 2rem;
+            background: #1e3c72;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-info {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
             align-items: center;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 2px solid #f0f0f0;
+            gap: 1rem;
         }
 
-        .price {
-            font-size: 1.8em;
-            color: #667eea;
-            font-weight: bold;
+        .contact-item i {
+            font-size: 2rem;
         }
 
-        .stock {
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
-        }
-
-        .in-stock {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .low-stock {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .out-of-stock {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 50px;
-            font-size: 1.5em;
+        /* Footer */
+        footer {
+            background: #0d1b2a;
             color: white;
-        }
-
-        .no-products {
+            padding: 2rem;
             text-align: center;
-            padding: 50px;
-            background: white;
-            border-radius: 15px;
-            color: #666;
-            font-size: 1.2em;
         }
 
-        .admin-link {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #764ba2;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 30px;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            transition: background 0.3s;
-            font-weight: 600;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .admin-link:hover {
-            background: #5f3a82;
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .search-bar {
-                flex-direction: column;
+            .nav-links {
+                gap: 1rem;
             }
 
-            .search-bar input {
-                width: 100%;
+            .hero h1 {
+                font-size: 2rem;
             }
 
-            h1 {
-                font-size: 1.8em;
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎨 Color Shop</h1>
-            <p class="tagline">Your trusted paint & color supplier</p>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">ColorCraft</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="stocks.html">Stocks</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Transform Your Space with Premium Paints</h1>
+            <p>Your trusted partner for quality Dulux paints and expert color solutions</p>
+            <a href="stocks.html" class="cta-button">Browse Our Stock</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">Welcome to ColorCraft Paint Shop</h2>
+            <p class="section-subtitle">Your premier destination for quality paints and professional service</p>
             
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search products, brands, or categories...">
-                <button onclick="searchProducts()">Search</button>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem; font-size: 1.1rem; color: #555;">
+                With over 15 years of experience in the paint industry, we pride ourselves on offering 
+                the finest selection of Dulux paints and painting supplies. Our knowledgeable staff is 
+                dedicated to helping you find the perfect colors and products for your project.
+            </p>
+
+            <div class="about-content">
+                <div class="about-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Premium Quality</h3>
+                    <p>Authorized Dulux dealer offering authentic, high-quality paints and finishes for every project</p>
+                </div>
+                <div class="about-card">
+                    <div class="feature-icon">💡</div>
+                    <h3>Expert Advice</h3>
+                    <p>Professional color consultation and technical guidance from our experienced team</p>
+                </div>
+                <div class="about-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Wide Selection</h3>
+                    <p>Extensive inventory of interior, exterior, and specialty paints in thousands of colors</p>
+                </div>
             </div>
-        </header>
-
-        <div class="filters">
-            <span class="filter-label">Filter by:</span>
-            <select id="categoryFilter" onchange="filterProducts()">
-                <option value="">All Categories</option>
-            </select>
-            <select id="brandFilter" onchange="filterProducts()">
-                <option value="">All Brands</option>
-            </select>
-            <select id="stockFilter" onchange="filterProducts()">
-                <option value="">All Stock Status</option>
-                <option value="in-stock">In Stock</option>
-                <option value="low-stock">Low Stock</option>
-                <option value="out-of-stock">Out of Stock</option>
-            </select>
         </div>
+    </section>
 
-        <div id="productsContainer" class="products-grid">
-            <div class="loading">Loading products...</div>
-        </div>
-    </div>
-
-    <a href="admin.html" class="admin-link">🔐 Admin Login</a>
-
-    <script>
-        const API_URL = 'https://colour-shop.vercel.app/api';
-        let allProducts = [];
-
-        // Fetch and display products
-        async function loadProducts() {
-            try {
-                const response = await fetch(`${API_URL}/products`);
-                allProducts = await response.json();
-                
-                populateFilters();
-                displayProducts(allProducts);
-            } catch (error) {
-                document.getElementById('productsContainer').innerHTML = 
-                    '<div class="no-products">Failed to load products. Please check if the server is running.</div>';
-                console.error('Error:', error);
-            }
-        }
-
-        function populateFilters() {
-            const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
-            const brands = [...new Set(allProducts.map(p => p.brand).filter(Boolean))];
-
-            const categoryFilter = document.getElementById('categoryFilter');
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat;
-                option.textContent = cat;
-                categoryFilter.appendChild(option);
-            });
-
-            const brandFilter = document.getElementById('brandFilter');
-            brands.forEach(brand => {
-                const option = document.createElement('option');
-                option.value = brand;
-                option.textContent = brand;
-                brandFilter.appendChild(option);
-            });
-        }
-
-        function displayProducts(products) {
-            const container = document.getElementById('productsContainer');
+    <!-- Products Section -->
+    <section class="products">
+        <div class="container">
+            <h2 class="section-title">Featured Dulux Products</h2>
+            <p class="section-subtitle">Discover our most popular paint collections</p>
             
-            if (products.length === 0) {
-                container.innerHTML = '<div class="no-products">No products found.</div>';
-                return;
-            }
-
-            container.innerHTML = products.map(product => {
-                const stockStatus = getStockStatus(product.quantity);
-                return `
-                    <div class="product-card">
-                        <div class="product-header">
-                            <div class="product-name">${product.name}</div>
-                            <div class="product-brand">${product.brand}</div>
-                        </div>
-                        
-                        <div class="product-details">
-                            ${product.color ? `
-                            <div class="detail-row">
-                                <span class="detail-label">Color:</span>
-                                <span class="detail-value">${product.color}</span>
-                            </div>` : ''}
-                            
-                            ${product.size ? `
-                            <div class="detail-row">
-                                <span class="detail-label">Size:</span>
-                                <span class="detail-value">${product.size}</span>
-                            </div>` : ''}
-                            
-                            ${product.category ? `
-                            <div class="detail-row">
-                                <span class="detail-label">Category:</span>
-                                <span class="detail-value">${product.category}</span>
-                            </div>` : ''}
-                            
-                            ${product.description ? `
-                            <div class="detail-row">
-                                <span class="detail-label">Description:</span>
-                                <span class="detail-value">${product.description}</span>
-                            </div>` : ''}
-                        </div>
-                        
-                        <div class="product-footer">
-                            <div class="price">₹${product.price.toLocaleString()}</div>
-                            <div class="stock ${stockStatus.class}">${stockStatus.text}</div>
-                        </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=500" alt="Interior Paint" class="product-image">
+                    <div class="product-info">
+                        <h3>Interior Emulsion</h3>
+                        <p>Premium quality interior paints with excellent coverage and durability. Available in matt, silk, and vinyl finishes.</p>
                     </div>
-                `;
-            }).join('');
-        }
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500" alt="Exterior Paint" class="product-image">
+                    <div class="product-info">
+                        <h3>Weathershield Exterior</h3>
+                        <p>Weather-resistant exterior paints that protect and beautify your home for years to come.</p>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.unsplash.com/photo-1604014237800-1c9102c219da?w=500" alt="Wood Paint" class="product-image">
+                    <div class="product-info">
+                        <h3>Wood & Metal Paints</h3>
+                        <p>Specialized paints and varnishes designed for wood and metal surfaces, indoors and out.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        function getStockStatus(quantity) {
-            if (quantity === 0) {
-                return { class: 'out-of-stock', text: 'Out of Stock' };
-            } else if (quantity <= 5) {
-                return { class: 'low-stock', text: `Low Stock (${quantity})` };
-            } else {
-                return { class: 'in-stock', text: `In Stock (${quantity})` };
-            }
-        }
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose ColorCraft?</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <h3>Authorized Dealer</h3>
+                    <p>Official Dulux partner ensuring genuine products</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🚚</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick delivery service for bulk orders</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">💰</div>
+                    <h3>Competitive Prices</h3>
+                    <p>Best prices with regular offers and discounts</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Color Matching</h3>
+                    <p>Professional color matching and tinting service</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        function filterProducts() {
-            const category = document.getElementById('categoryFilter').value;
-            const brand = document.getElementById('brandFilter').value;
-            const stock = document.getElementById('stockFilter').value;
-
-            let filtered = allProducts;
-
-            if (category) {
-                filtered = filtered.filter(p => p.category === category);
-            }
-
-            if (brand) {
-                filtered = filtered.filter(p => p.brand === brand);
-            }
-
-            if (stock) {
-                filtered = filtered.filter(p => {
-                    const status = getStockStatus(p.quantity);
-                    return status.class === stock;
-                });
-            }
-
-            displayProducts(filtered);
-        }
-
-        async function searchProducts() {
-            const query = document.getElementById('searchInput').value.trim();
+    <!-- Contact Preview Section -->
+    <section class="contact-preview">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">Visit us today or contact us for expert advice on your painting project</p>
             
-            if (!query) {
-                displayProducts(allProducts);
-                return;
-            }
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="feature-icon">📍</div>
+                    <div>
+                        <strong>Location</strong><br>
+                        Howrah, West Bengal
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="feature-icon">📞</div>
+                    <div>
+                        <strong>Phone</strong><br>
+                        +91 XXXXX XXXXX
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="feature-icon">⏰</div>
+                    <div>
+                        <strong>Hours</strong><br>
+                        Mon-Sat: 9AM - 7PM
+                    </div>
+                </div>
+            </div>
+            
+            <a href="contact.html" class="cta-button" style="margin-top: 2rem; display: inline-block;">Contact Us</a>
+        </div>
+    </section>
 
-            const filtered = allProducts.filter(p => 
-                p.name.toLowerCase().includes(query.toLowerCase()) ||
-                p.brand.toLowerCase().includes(query.toLowerCase()) ||
-                (p.category && p.category.toLowerCase().includes(query.toLowerCase()))
-            );
-
-            displayProducts(filtered);
-        }
-
-        // Allow Enter key to search
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') searchProducts();
-        });
-
-        // Load products on page load
-        loadProducts();
-    </script>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ColorCraft Paint Shop. All rights reserved. | Authorized Dulux Dealer</p>
+    </footer>
 </body>
 </html>
