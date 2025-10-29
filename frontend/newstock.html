@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Catalog - ColorCraft Paint Shop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Navigation */
+        nav {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🎨";
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(30, 60, 114, 0.9), rgba(42, 82, 152, 0.9)), 
+                        url('https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1600') center/cover;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-bar button {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Filters */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1rem;
+        }
+
+        select {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            border-color: #667eea;
+        }
+
+        select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-image-container {
+            width: 100%;
+            height: 250px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        
+        }
+
+        .color-swatch-overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .color-code-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            backdrop-filter: blur(5px);
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .product-header {
+            border-bottom: 2px solid #f5f5f5;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.4rem;
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .product-brand {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 1rem;
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+        }
+
+        .product-details {
+            margin: 1.5rem 0;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0.75rem 0;
+            padding: 0.5rem 0;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 600;
+            text-align: right;
+            font-size: 0.95rem;
+        }
+
+        .color-display {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .color-mini-swatch {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f5f5f5;
+        }
+
+        .price {
+            font-size: 2rem;
+            color: #1e3c72;
+            font-weight: 700;
+        }
+
+        .price::before {
+            content: '₹';
+            font-size: 1.5rem;
+        }
+
+        .stock {
+            padding: 0.5rem 1.25rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .in-stock {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+        }
+
+        .low-stock {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            color: #856404;
+        }
+
+        .out-of-stock {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            color: #721c24;
+        }
+
+        /* Loading and Empty States */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.5rem;
+            color: #667eea;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 4rem;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+            font-size: 1.3rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .no-products::before {
+            content: "📦";
+            display: block;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Admin Button */
+        .admin-link {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 999;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+        }
+
+        .admin-link::before {
+            content: "🔒";
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #0d1b2a;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filters select {
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-link {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="home.html" class="logo">ColorCraft</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#" class="active">Stocks</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="admin.html">Admin Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Product Catalog</h1>
+        <p>Browse our complete range of premium paints and supplies</p>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search products, brands, colors, colors code or categories...">
+                <button onclick="searchProducts()">Search</button>
+            </div>
+
+            <div class="filters">
+                <span class="filter-label">Filter by:</span>
+                <select id="categoryFilter" onchange="filterProducts()">
+                    <option value="">All Categories</option>
+                </select>
+                <select id="brandFilter" onchange="filterProducts()">
+                    <option value="">All Brands</option>
+                </select>
+                <select id="stockFilter" onchange="filterProducts()">
+                    <option value="">All Stock Status</option>
+                    <option value="in-stock">In Stock</option>
+                    <option value="low-stock">Low Stock</option>
+                    <option value="out-of-stock">Out of Stock</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsContainer" class="products-grid">
+            <div class="loading">Loading products...</div>
+        </div>
+    </div>
+
+    <!-- Admin Link -->
+    <a href="admin.html" class="admin-link">Admin Panel</a>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 ColorCraft Paint Shop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+        let allProducts = [];
+
+        // Fetch and display products
+        async function loadProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                allProducts = await response.json();
+                
+                populateFilters();
+                displayProducts(allProducts);
+            } catch (error) {
+                document.getElementById('productsContainer').innerHTML = 
+                    '<div class="no-products">Failed to load products. Please check if the server is running.</div>';
+                console.error('Error:', error);
+            }
+        }
+
+        function populateFilters() {
+            const categories = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
+            const brands = [...new Set(allProducts.map(p => p.brand).filter(Boolean))];
+
+            const categoryFilter = document.getElementById('categoryFilter');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categoryFilter.appendChild(option);
+            });
+
+            const brandFilter = document.getElementById('brandFilter');
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.textContent = brand;
+                brandFilter.appendChild(option);
+            });
+        }
+
+        function displayProducts(products) {
+            const container = document.getElementById('productsContainer');
+            
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-products">No products found matching your criteria.</div>';
+                return;
+            }
+
+            container.innerHTML = products.map(product => {
+                const stockStatus = getStockStatus(product.quantity);
+                
+                // Generate image HTML - prioritize uploaded image, fallback to color swatch or default
+                let imageHTML = '';
+                if (product.colorImageUrl) {
+                    // Use uploaded image from Cloudinary
+                    imageHTML = `
+                        <div class="product-image-container">
+                            <img src="${product.colorImageUrl}" alt="${product.name}" class="product-image">
+                            ${product.colorCode ? `<div class="color-code-badge">${product.colorCode}</div>` : ''}
+                        </div>
+                    `;
+                } else if (product.colorCode) {
+                    // Show color swatch if no image but color code exists
+                    imageHTML = `
+                        <div class="product-image-container" style="background: ${product.colorCode};">
+                            <div class="color-code-badge">${product.colorCode}</div>
+                        </div>
+                    `;
+                } else {
+                    // Fallback to default gradient
+                    imageHTML = `
+                        <div class="product-image-container" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        </div>
+                    `;
+                }
+                
+                return `
+                    <div class="product-card">
+                        ${imageHTML}
+                        <div class="product-content">
+                            <div class="product-header">
+                                <div class="product-name">${product.name}</div>
+                                <div class="product-brand">${product.brand}</div>
+                            </div>
+                            
+                            <div class="product-details">
+                                ${product.color ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">Color:</span>
+                                    <span class="detail-value">
+                                        ${product.color}
+                                    </span>
+                                </div>` : ''}
+                                
+                                ${product.size ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">Size:</span>
+                                    <span class="detail-value">${product.size}</span>
+                                </div>` : ''}
+                                
+                                ${product.category ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">Category:</span>
+                                    <span class="detail-value">${product.category}</span>
+                                </div>` : ''}
+                                
+                                ${product.description ? `
+                                <div class="detail-row">
+                                    <span class="detail-label">Description:</span>
+                                    <span class="detail-value">${product.description}</span>
+                                </div>` : ''}
+                            </div>
+                            
+                            <div class="product-footer">
+                                <div class="price">${product.price.toLocaleString()}</div>
+                                <div class="stock ${stockStatus.class}">${stockStatus.text}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStockStatus(quantity) {
+            if (quantity === 0) {
+                return { class: 'out-of-stock', text: 'Out of Stock' };
+            } else if (quantity <= 5) {
+                return { class: 'low-stock', text: `Low Stock (${quantity})` };
+            } else {
+                return { class: 'in-stock', text: `In Stock (${quantity})` };
+            }
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            const brand = document.getElementById('brandFilter').value;
+            const stock = document.getElementById('stockFilter').value;
+
+            let filtered = allProducts;
+
+            if (category) {
+                filtered = filtered.filter(p => p.category === category);
+            }
+
+            if (brand) {
+                filtered = filtered.filter(p => p.brand === brand);
+            }
+
+            if (stock) {
+                filtered = filtered.filter(p => {
+                    const status = getStockStatus(p.quantity);
+                    return status.class === stock;
+                });
+            }
+
+            displayProducts(filtered);
+        }
+
+        async function searchProducts() {
+            const query = document.getElementById('searchInput').value.trim();
+            
+            if (!query) {
+                displayProducts(allProducts);
+                return;
+            }
+
+            const filtered = allProducts.filter(p => 
+                p.name.toLowerCase().includes(query.toLowerCase()) ||
+                p.brand.toLowerCase().includes(query.toLowerCase()) ||
+                p.colorCode.toLowerCase().includes(query.toLowerCase())||
+                (p.category && p.category.toLowerCase().includes(query.toLowerCase())) ||
+                (p.color && p.color.toLowerCase().includes(query.toLowerCase())) ||
+                (p.colorCode && p.colorCode.toLowerCase().includes(query.toLowerCase()))
+            );
+
+            displayProducts(filtered);
+        }
+
+        // Allow Enter key to search
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchProducts();
+        });
+
+        // Load products on page load
+        loadProducts();
+    </script>
+</body>
+</html>
